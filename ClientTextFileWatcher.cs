@@ -11,17 +11,16 @@ namespace PathOfLava
 {
     public class ClientTextFileWatcher
     {
-        private List<TransitionEvent> TransitionEventHistory { get; set; }
-        private AutoResetEvent WaitHandle { get; set; } = new AutoResetEvent(false);
-        private FileSystemWatcher FileSystemWatcher { get; set; }
-        private Thread? WorkerThread { get; set; }
-        private CancellationTokenSource TokenSource { get; set; } = new CancellationTokenSource();
-        private bool IsTrackerRunning { get; set; } = false;
-        private readonly MainForm _mainForm;
+        private readonly AutoResetEvent _waitHandle = new(false);
+        private readonly FileSystemWatcher _fileSystemWatcher;
+        private readonly MainForm _mainFormInstance;
+        private Thread? _workerThread;
+        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
+        private bool _isTrackerRunning = false;
 
         public ClientTextFileWatcher(MainForm mainForm) 
         {
-            _mainForm = mainForm ?? throw new ArgumentNullException(nameof(mainForm));
+            _mainFormInstance = mainForm ?? throw new ArgumentNullException(nameof(mainForm));
 
             var clientTextFilePath = Path.GetDirectoryName(@"C:\Program Files (x86)\Grinding Gear Games\Path of Exile\logs\Client.txt");
 
@@ -30,31 +29,29 @@ namespace PathOfLava
                 throw new Exception("Client Text File Missing!");
             }
 
-            FileSystemWatcher = new FileSystemWatcher(clientTextFilePath)
+            _fileSystemWatcher = new FileSystemWatcher(clientTextFilePath)
             {
                 Filter = "Client.txt",
                 EnableRaisingEvents = true
             };
 
-            FileSystemWatcher.Changed += (s, e) => WaitHandle.Set();
-
-            TransitionEventHistory = new List<TransitionEvent>();
+            _fileSystemWatcher.Changed += (s, e) => _waitHandle.Set();
         }
 
         public bool StartWatching()
         {
-            if (!IsTrackerRunning)
+            if (!_isTrackerRunning)
             {
-                TokenSource = new CancellationTokenSource();
+                _tokenSource = new CancellationTokenSource();
 
-                WorkerThread = new(
-                    () => WatchClientTxt(TokenSource.Token)
+                _workerThread = new(
+                    () => WatchClientTxt(_tokenSource.Token)
                 );
 
-                WorkerThread.IsBackground = true;
-                WorkerThread.Start();
+                _workerThread.IsBackground = true;
+                _workerThread.Start();
 
-                IsTrackerRunning = true;
+                _isTrackerRunning = true;
                 Console.WriteLine("Client text watcher started.\n");
             }
 
@@ -63,13 +60,13 @@ namespace PathOfLava
 
         public bool StopWatching()
         {
-            if (IsTrackerRunning && WorkerThread is not null)
+            if (_isTrackerRunning && _workerThread is not null)
             {
-                TokenSource.Cancel();
-                WorkerThread.Join();
-                TokenSource.Dispose();
+                _tokenSource.Cancel();
+                _workerThread.Join();
+                _tokenSource.Dispose();
 
-                IsTrackerRunning = false;
+                _isTrackerRunning = false;
                 Console.WriteLine("Client text watcher stopped.\n");
             }
 
@@ -157,14 +154,13 @@ namespace PathOfLava
                             Console.WriteLine($"\tSeed: {transitionEvent.Seed}");
                             Console.WriteLine($"\tTime Entered: {transitionEvent.TransitionType}\n");
 
-                            _mainForm.CurrentZone = transitionEvent.Name;
-                            _mainForm.AddTransitionEvent(transitionEvent);
-                            TransitionEventHistory.Add(transitionEvent);
+                            _mainFormInstance.CurrentZone = transitionEvent.Name;
+                            _mainFormInstance.AddTransitionEvent(transitionEvent);
                         }
                     }
                     else
                     {
-                        WaitHandle.WaitOne(1000);
+                        _waitHandle.WaitOne(1000);
                     }
                 }
             }

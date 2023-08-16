@@ -38,21 +38,25 @@
             rawEventsTab = new TabPage();
             historyTabPanel = new Panel();
             historyDataGrid = new DataGridView();
-            Zone = new DataGridViewTextBoxColumn();
             Level = new DataGridViewTextBoxColumn();
-            TimeEntered = new DataGridViewTextBoxColumn();
+            Zone = new DataGridViewTextBoxColumn();
+            EventType = new DataGridViewTextBoxColumn();
+            Time = new DataGridViewTextBoxColumn();
             statsTab = new TabPage();
             statsTabPanel = new Panel();
             mainMenu = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            newToolStripMenuItem = new ToolStripMenuItem();
             openToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
-            exportAsCSVToolStripMenuItem = new ToolStripMenuItem();
-            exportAsJSONToolStripMenuItem = new ToolStripMenuItem();
+            exportMapListToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             lmaoToolStripMenuItem = new ToolStripMenuItem();
+            statusStrip1 = new StatusStrip();
+            statusLabel = new ToolStripStatusLabel();
+            exportContractListToolStripMenuItem = new ToolStripMenuItem();
             mainPanel.SuspendLayout();
             tabContainer.SuspendLayout();
             homeTab.SuspendLayout();
@@ -62,6 +66,7 @@
             ((System.ComponentModel.ISupportInitialize)historyDataGrid).BeginInit();
             statsTab.SuspendLayout();
             mainMenu.SuspendLayout();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // mainPanel
@@ -72,7 +77,7 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(385, 469);
+            mainPanel.Size = new Size(483, 471);
             mainPanel.TabIndex = 0;
             // 
             // tabContainer
@@ -87,7 +92,7 @@
             tabContainer.Name = "tabContainer";
             tabContainer.Padding = new Point(45, 3);
             tabContainer.SelectedIndex = 0;
-            tabContainer.Size = new Size(385, 445);
+            tabContainer.Size = new Size(483, 447);
             tabContainer.TabIndex = 1;
             // 
             // homeTab
@@ -96,7 +101,7 @@
             homeTab.Location = new Point(4, 24);
             homeTab.Name = "homeTab";
             homeTab.Padding = new Padding(3);
-            homeTab.Size = new Size(377, 417);
+            homeTab.Size = new Size(475, 419);
             homeTab.TabIndex = 0;
             homeTab.Text = "Home";
             homeTab.UseVisualStyleBackColor = true;
@@ -109,13 +114,13 @@
             homeTabPanel.Dock = DockStyle.Fill;
             homeTabPanel.Location = new Point(3, 3);
             homeTabPanel.Name = "homeTabPanel";
-            homeTabPanel.Size = new Size(371, 411);
+            homeTabPanel.Size = new Size(469, 413);
             homeTabPanel.TabIndex = 0;
             // 
             // currentZoneTextBox
             // 
             currentZoneTextBox.Enabled = false;
-            currentZoneTextBox.Location = new Point(116, 7);
+            currentZoneTextBox.Location = new Point(165, 23);
             currentZoneTextBox.Name = "currentZoneTextBox";
             currentZoneTextBox.Size = new Size(250, 23);
             currentZoneTextBox.TabIndex = 2;
@@ -124,7 +129,7 @@
             // 
             currentZoneLabel.AutoSize = true;
             currentZoneLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            currentZoneLabel.Location = new Point(5, 9);
+            currentZoneLabel.Location = new Point(54, 23);
             currentZoneLabel.Name = "currentZoneLabel";
             currentZoneLabel.Size = new Size(105, 21);
             currentZoneLabel.TabIndex = 1;
@@ -133,9 +138,9 @@
             // startStopButton
             // 
             startStopButton.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            startStopButton.Location = new Point(22, 343);
+            startStopButton.Location = new Point(22, 330);
             startStopButton.Name = "startStopButton";
-            startStopButton.Size = new Size(327, 56);
+            startStopButton.Size = new Size(425, 56);
             startStopButton.TabIndex = 0;
             startStopButton.Text = "Start";
             startStopButton.UseVisualStyleBackColor = true;
@@ -147,7 +152,7 @@
             rawEventsTab.Location = new Point(4, 24);
             rawEventsTab.Name = "rawEventsTab";
             rawEventsTab.Padding = new Padding(3);
-            rawEventsTab.Size = new Size(377, 417);
+            rawEventsTab.Size = new Size(475, 419);
             rawEventsTab.TabIndex = 1;
             rawEventsTab.Text = "History";
             rawEventsTab.UseVisualStyleBackColor = true;
@@ -158,40 +163,60 @@
             historyTabPanel.Dock = DockStyle.Fill;
             historyTabPanel.Location = new Point(3, 3);
             historyTabPanel.Name = "historyTabPanel";
-            historyTabPanel.Size = new Size(371, 411);
+            historyTabPanel.Size = new Size(469, 413);
             historyTabPanel.TabIndex = 0;
             // 
             // historyDataGrid
             // 
             historyDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            historyDataGrid.Columns.AddRange(new DataGridViewColumn[] { Zone, Level, TimeEntered });
-            historyDataGrid.Location = new Point(3, 8);
+            historyDataGrid.Columns.AddRange(new DataGridViewColumn[] { Level, Zone, EventType, Time });
+            historyDataGrid.Dock = DockStyle.Fill;
+            historyDataGrid.Location = new Point(0, 0);
             historyDataGrid.Name = "historyDataGrid";
+            historyDataGrid.ReadOnly = true;
+            historyDataGrid.RowHeadersVisible = false;
             historyDataGrid.RowTemplate.Height = 25;
-            historyDataGrid.Size = new Size(364, 398);
+            historyDataGrid.Size = new Size(469, 413);
             historyDataGrid.TabIndex = 0;
-            // 
-            // Zone
-            // 
-            Zone.HeaderText = "Zone";
-            Zone.Name = "Zone";
             // 
             // Level
             // 
+            Level.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             Level.HeaderText = "Level";
             Level.Name = "Level";
+            Level.ReadOnly = true;
+            Level.Width = 59;
             // 
-            // TimeEntered
+            // Zone
             // 
-            TimeEntered.HeaderText = "Time Entered";
-            TimeEntered.Name = "TimeEntered";
+            Zone.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Zone.HeaderText = "Zone";
+            Zone.Name = "Zone";
+            Zone.ReadOnly = true;
+            Zone.Width = 59;
+            // 
+            // EventType
+            // 
+            EventType.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            EventType.HeaderText = "Event";
+            EventType.Name = "EventType";
+            EventType.ReadOnly = true;
+            EventType.Width = 61;
+            // 
+            // Time
+            // 
+            Time.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Time.HeaderText = "Time";
+            Time.Name = "Time";
+            Time.ReadOnly = true;
+            Time.Width = 58;
             // 
             // statsTab
             // 
             statsTab.Controls.Add(statsTabPanel);
             statsTab.Location = new Point(4, 24);
             statsTab.Name = "statsTab";
-            statsTab.Size = new Size(377, 417);
+            statsTab.Size = new Size(475, 419);
             statsTab.TabIndex = 2;
             statsTab.Text = "Stats";
             statsTab.UseVisualStyleBackColor = true;
@@ -201,7 +226,7 @@
             statsTabPanel.Dock = DockStyle.Fill;
             statsTabPanel.Location = new Point(0, 0);
             statsTabPanel.Name = "statsTabPanel";
-            statsTabPanel.Size = new Size(377, 417);
+            statsTabPanel.Size = new Size(475, 419);
             statsTabPanel.TabIndex = 0;
             // 
             // mainMenu
@@ -210,40 +235,44 @@
             mainMenu.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, helpToolStripMenuItem });
             mainMenu.Location = new Point(0, 0);
             mainMenu.Name = "mainMenu";
-            mainMenu.Size = new Size(385, 24);
+            mainMenu.Size = new Size(483, 24);
             mainMenu.TabIndex = 0;
             mainMenu.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem, exportAsCSVToolStripMenuItem, exportAsJSONToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, openToolStripMenuItem, saveToolStripMenuItem, exportMapListToolStripMenuItem, exportContractListToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
+            // newToolStripMenuItem
+            // 
+            newToolStripMenuItem.Name = "newToolStripMenuItem";
+            newToolStripMenuItem.Size = new Size(180, 22);
+            newToolStripMenuItem.Text = "New";
+            newToolStripMenuItem.Click += newToolStripMenuItem_Click;
+            // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(153, 22);
+            openToolStripMenuItem.Size = new Size(180, 22);
             openToolStripMenuItem.Text = "Open";
+            openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(153, 22);
+            saveToolStripMenuItem.Size = new Size(180, 22);
             saveToolStripMenuItem.Text = "Save";
+            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
-            // exportAsCSVToolStripMenuItem
+            // exportMapListToolStripMenuItem
             // 
-            exportAsCSVToolStripMenuItem.Name = "exportAsCSVToolStripMenuItem";
-            exportAsCSVToolStripMenuItem.Size = new Size(153, 22);
-            exportAsCSVToolStripMenuItem.Text = "Export as CSV";
-            // 
-            // exportAsJSONToolStripMenuItem
-            // 
-            exportAsJSONToolStripMenuItem.Name = "exportAsJSONToolStripMenuItem";
-            exportAsJSONToolStripMenuItem.Size = new Size(153, 22);
-            exportAsJSONToolStripMenuItem.Text = "Export as JSON";
+            exportMapListToolStripMenuItem.Name = "exportMapListToolStripMenuItem";
+            exportMapListToolStripMenuItem.Size = new Size(180, 22);
+            exportMapListToolStripMenuItem.Text = "Export Map List";
+            exportMapListToolStripMenuItem.Click += exportMapListToolStripMenuItem_Click;
             // 
             // editToolStripMenuItem
             // 
@@ -271,17 +300,41 @@
             lmaoToolStripMenuItem.Size = new Size(104, 22);
             lmaoToolStripMenuItem.Text = "Lmao";
             // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { statusLabel });
+            statusStrip1.Location = new Point(0, 449);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(483, 22);
+            statusStrip1.TabIndex = 3;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // statusLabel
+            // 
+            statusLabel.Name = "statusLabel";
+            statusLabel.Size = new Size(81, 17);
+            statusLabel.Text = "No file loaded";
+            // 
+            // exportContractListToolStripMenuItem
+            // 
+            exportContractListToolStripMenuItem.Name = "exportContractListToolStripMenuItem";
+            exportContractListToolStripMenuItem.Size = new Size(180, 22);
+            exportContractListToolStripMenuItem.Text = "Export Contract List";
+            exportContractListToolStripMenuItem.Click += exportContractListToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(385, 469);
+            ClientSize = new Size(483, 471);
+            Controls.Add(statusStrip1);
             Controls.Add(mainPanel);
             MainMenuStrip = mainMenu;
             MinimumSize = new Size(401, 0);
             Name = "MainForm";
             Text = "Path of Lava";
             TopMost = true;
+            FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
@@ -295,7 +348,10 @@
             statsTab.ResumeLayout(false);
             mainMenu.ResumeLayout(false);
             mainMenu.PerformLayout();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -305,8 +361,6 @@
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem openToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
-        private ToolStripMenuItem exportAsCSVToolStripMenuItem;
-        private ToolStripMenuItem exportAsJSONToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
@@ -322,8 +376,14 @@
         private Label currentZoneLabel;
         private TextBox currentZoneTextBox;
         private DataGridView historyDataGrid;
-        private DataGridViewTextBoxColumn Zone;
         private DataGridViewTextBoxColumn Level;
-        private DataGridViewTextBoxColumn TimeEntered;
+        private DataGridViewTextBoxColumn Zone;
+        private DataGridViewTextBoxColumn EventType;
+        private DataGridViewTextBoxColumn Time;
+        private ToolStripMenuItem newToolStripMenuItem;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel statusLabel;
+        private ToolStripMenuItem exportMapListToolStripMenuItem;
+        private ToolStripMenuItem exportContractListToolStripMenuItem;
     }
 }

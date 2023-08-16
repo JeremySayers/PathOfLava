@@ -8,6 +8,8 @@ namespace PathOfLava
 {
     public enum TransitionType
     {
+        StartedPlaying,
+        StoppedPlaying,
         Hideout,
         Map,
         RogueHarbour,
